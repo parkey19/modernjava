@@ -34,7 +34,7 @@ public class SimpleCell implements Publisher<Integer>, Subscriber<Integer> {
   }
 
   public void subscribe(Consumer<? super Integer> onNext) {
-    subscribers.add(new Subscriber<>() {
+    subscribers.add(new Subscriber<Integer>() {
 
       @Override
       public void onComplete() {}
