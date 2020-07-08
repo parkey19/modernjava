@@ -93,5 +93,12 @@ public class Quize5 {
 
         System.out.println(min.orElse(-1));
 
+        Stream<String> config = Stream.of("config", "home")
+                .flatMap(s -> Stream.ofNullable(System.getProperty(s)))
+                ;
+        //fibo
+        Stream.iterate(new int[]{0,1}, ints -> new int[]{ints[1], ints[0]+ints[1]})
+                .limit(20)
+                .forEach(t -> System.out.println("(" + t[0] + "," + t[1] + ")"));
     }
 }
