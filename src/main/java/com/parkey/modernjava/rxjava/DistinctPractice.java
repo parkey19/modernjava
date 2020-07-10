@@ -20,8 +20,29 @@ import java.util.concurrent.TimeUnit;
 public class DistinctPractice {
     public static void main(String[] args) throws InterruptedException {
         FlowableProcessor<Long> flowableProcessor = PublishProcessor.create();
+        ExecutorService executorService1 = Executors.newFixedThreadPool(4);
+        ExecutorService executorService2 = Executors.newFixedThreadPool(4);
+        ExecutorService executorService3 = Executors.newFixedThreadPool(2);
+
+        for (int i = 0; i < 5000000; i++) {
+            long leftLimit = 1L;
+            long rightLimit = 3L;
+            long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
+            long generatedLong2 = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
+            executorService1.submit(() -> {
+                log.info("ex1 :{}", generatedLong);
+                flowableProcessor.onNext(generatedLong);
+            });
+            executorService2.submit(() -> {
+                log.info("ex2 :{}", generatedLong2);
+                flowableProcessor.onNext(generatedLong2);
+            });
+        }
+
         flowableProcessor
+                .onBackpressureBuffer()
                 .window(1, TimeUnit.SECONDS)
+
                 .doOnNext(longFlowable -> {
                     log.info("window: {}", longFlowable.toString());
                 })
@@ -36,24 +57,7 @@ public class DistinctPractice {
                     log.info("result :{}", aLong);
                 });
 
-        ExecutorService executorService1 = Executors.newFixedThreadPool(4);
-        ExecutorService executorService2 = Executors.newFixedThreadPool(4);
-        ExecutorService executorService3 = Executors.newFixedThreadPool(2);
 
-        for (int i = 0; i < 500000; i++) {
-            long leftLimit = 1L;
-            long rightLimit = 3L;
-            long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
-            long generatedLong2 = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
-            executorService1.submit(() -> {
-                log.info("ex1 :{}", generatedLong);
-                flowableProcessor.onNext(generatedLong);
-            });
-            executorService2.submit(() -> {
-                log.info("ex2 :{}", generatedLong2);
-                flowableProcessor.onNext(generatedLong2);
-            });
-        }
 
 
 
