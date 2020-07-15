@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -36,7 +37,7 @@ public class DistinctPractice2 {
 
         CopyOnWriteArrayList copyOnWriteArrayList = new CopyOnWriteArrayList();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
             long leftLimit = 1l;
             long rightLimit = 3l;
             long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
@@ -77,9 +78,13 @@ public class DistinctPractice2 {
 
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 class User {
     Long id;
+    LocalDateTime createTime = LocalDateTime.now();
+
+    User(Long id) {
+        this.id = id;
+    }
 }
