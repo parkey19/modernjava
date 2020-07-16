@@ -27,26 +27,27 @@ public class DistinctPractice2 {
         ExecutorService executorService1 = Executors.newFixedThreadPool(4);
 //        ExecutorService executorService2 = Executors.newFixedThreadPool(4);
         flowableProcessor
+                .onBackpressureBuffer()
                 .delay(1, TimeUnit.SECONDS)
                 .doOnNext(user -> log.info("발행 : "+ user))
                 .groupBy(User::getId)
-                .doOnNext(gf -> log.info("gf : {} key: {}", gf.toString(), gf.getKey()))
+                .doOnNext(gf -> log.info("@@@ gf : {} key: {}", gf.toString(), gf.getKey()))
                 .flatMap(gf -> gf.throttleLast(500, TimeUnit.MILLISECONDS))
-                .doOnNext(s ->log.info("debounce : {}", s))
-                .subscribe(user -> log.info("r2 : {}", user.getId()));
+                .doOnNext(s ->log.info("@@@ debounce : {}", s))
+                .subscribe(user -> log.info("r2 : {}", user));
 
         CopyOnWriteArrayList copyOnWriteArrayList = new CopyOnWriteArrayList();
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 1000; i++) {
             long leftLimit = 1l;
             long rightLimit = 3l;
             long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
             long generatedLong2 = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
             executorService1.submit(() -> {
-                log.debug("call next : "+ generatedLong);
+//                log.debug("call next : "+ generatedLong);
                 flowableProcessor.onNext(new User(generatedLong));
                 copyOnWriteArrayList.add(generatedLong);
-                randomInterval();
+//                randomInterval();
             });
 //            executorService2.submit(() -> {
 //                flowableProcessor.onNext(new User(generatedLong));
