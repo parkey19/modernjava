@@ -1,39 +1,31 @@
 package com.parkey.modernjava.ch06;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.counting;
-import static java.util.stream.Collectors.filtering;
-import static java.util.stream.Collectors.flatMapping;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.reducing;
-import static java.util.stream.Collectors.summingInt;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-import static com.parkey.modernjava.ch06.Dish.dishTags;
-import static com.parkey.modernjava.ch06.Dish.menu;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.parkey.modernjava.ch06.Dish.dishTags;
+import static com.parkey.modernjava.ch06.Dish.menu;
+import static java.util.stream.Collectors.*;
 
 public class Grouping {
 
   enum CaloricLevel { DIET, NORMAL, FAT };
 
   public static void main(String ... args) {
-    System.out.println("Dishes grouped by type: " + groupDishesByType());
-    System.out.println("Dish names grouped by type: " + groupDishNamesByType());
-    System.out.println("Dish tags grouped by type: " + groupDishTagsByType());
-    System.out.println("Caloric dishes grouped by type: " + groupCaloricDishesByType());
-    System.out.println("Dishes grouped by caloric level: " + groupDishesByCaloricLevel());
-    System.out.println("Dishes grouped by type and caloric level: " + groupDishedByTypeAndCaloricLevel());
-    System.out.println("Count dishes in groups: " + countDishesInGroups());
-    System.out.println("Most caloric dishes by type: " + mostCaloricDishesByType());
-    System.out.println("Most caloric dishes by type: " + mostCaloricDishesByTypeWithoutOprionals());
-    System.out.println("Sum calories by type: " + sumCaloriesByType());
-    System.out.println("Caloric levels by type: " + caloricLevelsByType());
+//    System.out.println("Dishes grouped by type: " + groupDishesByType());
+//    System.out.println("Dish names grouped by type: " + groupDishNamesByType());
+//    System.out.println("Dish tags grouped by type: " + groupDishTagsByType());
+//    System.out.println("Caloric dishes grouped by type: " + groupCaloricDishesByType());
+//    System.out.println("Dishes grouped by caloric level: " + groupDishesByCaloricLevel());
+//    System.out.println("Dishes grouped by type and caloric level: " + groupDishedByTypeAndCaloricLevel());
+//    System.out.println("Count dishes in groups: " + countDishesInGroups());
+//    System.out.println("Most caloric dishes by type: " + mostCaloricDishesByType());
+//    System.out.println("Most caloric dishes by type: " + mostCaloricDishesByTypeWithoutOprionals());
+//    System.out.println("Sum calories by type: " + sumCaloriesByType());
+//    System.out.println("Caloric levels by type: " + caloricLevelsByType());
+      System.out.println("Caloric levels by type: " + groupDishType());
   }
 
   private static Map<Dish.Type, List<Dish>> groupDishesByType() {
@@ -51,6 +43,13 @@ public class Grouping {
         groupingBy(Dish::getType,
             flatMapping(dish -> dishTags.get(dish.getName()).stream(), toSet())));
   }
+
+    private static Map<String, Dish>  groupDishType() {
+        return menu.stream().collect(toMap(Dish::getName, dish -> {
+            return dish;
+        }));
+
+    }
 
   private static Map<Dish.Type, List<Dish>> groupCaloricDishesByType() {
     //return menu.stream().filter(dish -> dish.getCalories() > 500).collect(groupingBy(Dish::getType));

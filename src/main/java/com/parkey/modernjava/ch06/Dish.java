@@ -1,11 +1,14 @@
 package com.parkey.modernjava.ch06;
 
-import static java.util.Arrays.asList;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
+
+@ToString
 public class Dish {
 
   private final String name;
@@ -36,10 +39,12 @@ public class Dish {
     return type;
   }
 
-  @Override
-  public String toString() {
-    return name;
-  }
+//  @Override
+//  public String toString() {
+//    return name;
+//  }
+
+
 
   public enum Type {
     MEAT,
